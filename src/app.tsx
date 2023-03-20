@@ -1,85 +1,47 @@
 import { useMemo, useState } from "react";
 import useFetch from "./hooks/useFetch";
-
-type DataShape = {
-  id: string;
-  name: string;
-  spend: number;
-  BCAP1: string;
-  BCAP2: string;
-  BCAP3: string;
-};
-
-type TreeArgs = {
-  id: string;
-  name: string;
-  spend: number;
-};
-
-export class Tree {
-  id: string;
-  name: string;
-  spend: number;
-  children: Tree[];
-
-  constructor({ id, name, spend }: TreeArgs) {
-    this.id = id;
-    this.name = name;
-    this.spend = spend;
-    this.children = [];
-  }
-
-  addChild(args: TreeArgs) {
-    const child = new Tree(args);
-    this.children.push(child);
-    return child;
-  }
-}
-
-type Node = {
-  name: string;
-  children: Node[];
-};
+import Tree from "./components/tree";
+import type { ITree, DataShape } from "./types";
 
 const getTreeLabels = (data: {
   lev1KeyArr: string[];
   lev2KeyArr: string[];
   lev3KeyArr: string[];
 }) => {
-  const rootNodes: Node[] = [];
+  const rootTrees: ITree[] = [];
 
   data.lev1KeyArr.forEach((lev1Key) => {
-    const rootNode: Node = {
+    const rootTree: ITree = {
       name: lev1Key,
       children: [],
     };
 
-    rootNodes.push(rootNode);
+    rootTrees.push(rootTree);
 
     data.lev2KeyArr.forEach((lev2Key) => {
       if (lev2Key.startsWith(lev1Key + ".")) {
-        const childNode: Node = {
+        const childTree: ITree = {
           name: lev2Key,
           children: [],
         };
 
-        rootNode.children.push(childNode);
+        rootTree.children.push(childTree);
 
         data.lev3KeyArr.forEach((lev3Key) => {
           if (lev3Key.startsWith(lev2Key + ".")) {
-            const grandChildNode = {
+            const grandChildTree = {
               name: lev3Key,
               children: [],
             };
 
-            childNode.children.push(grandChildNode);
+            childTree.children.push(grandChildTree);
           }
         });
       }
     });
   });
 
-  return rootNodes;
+  return rootTrees;
 };
 
 const getKeys = (data: DataShape[]) => {
@@ -108,14 +70,13 @@ const getKeys = (data: DataShape[]) => {
 
 function App() {
   const records = useFetch<DataShape[]>("http://localhost:8080/data");
-  const nodes = useMemo(() => {
+  const trees = useMemo(() => {
     if (records.data) {
       return getKeys(records.data);
     }
     return [];
   }, [records.data]);
-  console.log(records.data);
-  console.log(nodes);
+  console.log(trees);
 
   const [text, setText] = useState("");
 
@@ -126,14 +87,20 @@ function App() {
       <input value={text} onChange={(e) => setText(e.target.value)} />
 
       <div>
-        {records.isLoading ? (
-          <p>Loading...</p>
-        ) : records.error ? (
-          <p>Error: {records.error.message}</p>
-        ) : (
-          records.data?.map((e) => <p key={e.id}>{JSON.stringify(e)}</p>)
-        )}
+        {trees.map((e) => (
+          <Tree {...e} idx={0} />
+        ))}
       </div>
+
+      {/* <div> */}
+      {/*   {records.isLoading ? ( */}
+      {/*     <p>Loading...</p> */}
+      {/*   ) : records.error ? ( */}
+      {/*     <p>Error: {records.error.message}</p> */}
+      {/*   ) : ( */}
+      {/*     records.data?.map((e) => <p key={e.id}>{JSON.stringify(e)}</p>) */}
+      {/*   )} */}
+      {/* </div> */}
     </div>
   );
 }
