@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";
 import useFetch from "./hooks/useFetch";
 
 type DataShape = {
@@ -9,12 +10,27 @@ type DataShape = {
   BCAP3: string;
 };
 
+const transformData = (data: DataShape[]) => {
+  console.log("transformData called");
+  return data;
+};
+
 function App() {
   const records = useFetch<DataShape[]>("http://localhost:8080/data");
+  const transformed = useMemo(() => {
+    if (records.data) {
+      return transformData(records.data);
+    }
+    return [];
+  }, [records.data]);
+
+  const [text, setText] = useState("");
 
   return (
     <div>
       <h1>React Coding Exercise</h1>
+
+      <input value={text} onChange={(e) => setText(e.target.value)} />
 
       <div>
         {records.isLoading ? (
