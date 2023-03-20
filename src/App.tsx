@@ -10,13 +10,21 @@ type DataShape = {
 };
 
 function App() {
-  const data = useFetch<DataShape[]>("http://localhost:8080/data");
-
-  console.log(data);
+  const records = useFetch<DataShape[]>("http://localhost:8080/data");
 
   return (
     <div>
       <h1>React Coding Exercise</h1>
+
+      <div>
+        {records.isLoading ? (
+          <p>Loading...</p>
+        ) : records.error ? (
+          <p>Error: {records.error.message}</p>
+        ) : (
+          records.data?.map((e) => <p key={e.id}>{JSON.stringify(e)}</p>)
+        )}
+      </div>
     </div>
   );
 }

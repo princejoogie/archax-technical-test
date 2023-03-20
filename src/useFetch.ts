@@ -30,12 +30,20 @@ export default function useFetch<T>(url: string): UseFetchData<T> {
         setIsLoading(true);
       }
 
-      const res = await fetch(url, { signal: controller.signal });
-      if (res.ok) {
-        const data = await res.json();
-        setData(data);
-      } else {
-        setError(new Error("Error fetching data", { cause: res.statusText }));
+      try {
+        const res = await fetch(url, { signal: controller.signal });
+        if (res.ok) {
+          const data = await res.json();
+          cache.set(url, data);
+          setData(data);
+          setError(null);
+        } else {
+          cache.delete(url);
+          setData(null);
+          setError(new Error("Error fetching data", { cause: res.statusText }));
+        }
+      } catch {
+        console.log("CATCH BLOCK");
       }
 
       if (refetch) {
@@ -45,15 +53,17 @@ export default function useFetch<T>(url: string): UseFetchData<T> {
       }
     };
 
-    const refetch = () => fetchData(true);
+    const refetch = () => {
+      fetchData(true);
+    };
 
     window.addEventListener("focus", refetch);
-
     fetchData();
+
     return () => {
-      controller.abort();
-      setIsLoading(false);
       window.removeEventListener("focus", refetch);
+      setIsLoading(false);
+      controller.abort();
     };
   }, [url]);
 
