@@ -1,10 +1,13 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
 const port = 8080;
 
-const data = require('./data');
+const data = require("./data");
 
-app.get("/data", (req, res) => {
+app.use(cors({ origin: "*" }));
+
+app.get("/data", (_, res) => {
   res.json(data);
 });
 

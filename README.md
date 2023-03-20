@@ -14,7 +14,7 @@ Launch application in browser at [http://localhost:3000](http://localhost:3000).
 
 We would like you to build a simple data explorer as shown in the image below. This is a wireframe to demonstrate how the app should look once complete. Do not add any additional dependencies and you do not need to amend the data service to complete this task.
 
-![React Exercise wireframe](/react-exercise.png)
+![React Exercise wireframe](./react-exercise.png)
 
 The data is a list of application records and is fetchable at `/data`. Each application has 3 levels of business capabilities. Business capabilities are hierarchical as shown in the image (Business capability 1 -> Business capability 2 -> Business capability 3)
 
