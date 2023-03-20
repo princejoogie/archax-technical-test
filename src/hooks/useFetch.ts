@@ -30,20 +30,17 @@ export default function useFetch<T>(url: string): UseFetchData<T> {
         setIsLoading(true);
       }
 
-      try {
-        const res = await fetch(url, { signal: controller.signal });
-        if (res.ok) {
-          const data = await res.json();
-          cache.set(url, data);
-          setData(data);
-          setError(null);
-        } else {
-          cache.delete(url);
-          setData(null);
-          setError(new Error("Error fetching data", { cause: res.statusText }));
-        }
-      } catch {
-        console.log("CATCH BLOCK");
+      const res = await fetch(url, { signal: controller.signal });
+
+      if (res.ok) {
+        const data = await res.json();
+        cache.set(url, data);
+        setData(data);
+        setError(null);
+      } else {
+        cache.delete(url);
+        setData(null);
+        setError(new Error("Error fetching data", { cause: res.statusText }));
       }
 
       if (refetch) {
