@@ -11,6 +11,8 @@ const useEffectOnce = (effect: EffectCallback) => {
   useEffect(effect, []);
 };
 
+// A hook that returns a throttled value. It will update the state after the
+// `ms` delay has passed without it being called again.
 const useThrottle = <T>(value: T, ms: number = 200) => {
   const [state, setState] = useState<T>(value);
   const timeout = useRef<ReturnType<typeof setTimeout>>();

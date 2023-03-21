@@ -9,6 +9,9 @@ type UseFetchData<T> = {
 
 const cache = new Map<string, any>();
 
+// A wrapper around fetch that caches the response, refetches on window focus,
+// handles errors, and returns a loading state. It also uses AbortController to
+// cancel requests when the component unmounts.
 const useFetch = <T>(url: string): UseFetchData<T> => {
   const [data, setData] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState(true);

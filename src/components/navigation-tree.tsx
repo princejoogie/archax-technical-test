@@ -27,6 +27,7 @@ const NavigationTree = ({ name, children, idx }: ITree & { idx: number }) => {
 
   return (
     <div style={{ marginLeft: `${idx * 15}px` }} className="select-none">
+      {/* Button to toggle the navigation tree children */}
       <div
         className={`flex rounded-md mt-1 p-1 items-center transition-colors hover:bg-gray-100 ${
           selectedCapability === name
@@ -68,6 +69,7 @@ const NavigationTree = ({ name, children, idx }: ITree & { idx: number }) => {
       {isOpen && (
         <div>
           {children.map((e) => (
+            /* Recusively call NavigationTree on children */
             <NavigationTree {...e} key={e.name} idx={idx + 1} />
           ))}
         </div>

@@ -1,4 +1,5 @@
 import { useRecords } from "../contexts/record-context";
+import { commaize } from "../utils";
 
 const Content = () => {
   const { filteredRecords, selectedCapability } = useRecords();
@@ -13,9 +14,14 @@ const Content = () => {
 
       <div className="flex gap-4 flex-wrap mt-4">
         {filteredRecords.map((e) => (
-          <div key={e.id} className="border bg-white border-gray-300 rounded-lg p-4">
+          <div
+            key={e.id}
+            className="border bg-white border-gray-300 rounded-lg p-4"
+          >
             <h4 className="text-center">{e.name}</h4>
-            <p className="text-center text-sm text-gray-600">${e.spend}</p>
+            <p className="text-center text-sm text-gray-600">
+              ${commaize(e.spend)}
+            </p>
           </div>
         ))}
       </div>

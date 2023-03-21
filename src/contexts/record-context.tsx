@@ -26,6 +26,7 @@ export const RecordProvider = ({ children }: { children: ReactNode }) => {
   const [range, setRange] = useState<[number, number]>([0, 0]);
   const [rangeValue, setRangeValue] = useState(0);
 
+  // filter records by selected capability
   const filteredRecords = useMemo(() => {
     if (!selectedCapability || !data) {
       return [];
@@ -48,6 +49,7 @@ export const RecordProvider = ({ children }: { children: ReactNode }) => {
     return filtered;
   }, [selectedCapability, data]);
 
+  // filter records by range
   const filteredOnRange = useMemo(() => {
     return filteredRecords.filter((e) => e.spend >= rangeValue);
   }, [rangeValue, filteredRecords]);
@@ -69,4 +71,5 @@ export const RecordProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
+// hook to use records context without explicitly importing useContext and recordsContext everytime
 export const useRecords = () => useContext(recordsContext);

@@ -4,7 +4,10 @@ import NavigationTree from "./navigation-tree";
 
 import type { ITree, DataShape } from "../types";
 import useThrottle from "../hooks/useThrottle";
+import { commaize } from "../utils";
 
+// generate a tree structure from data
+// e.g [{ name: "A", children: [{ name: "A.1", children: [] }] }]...
 const getTreeLabels = (data: {
   lev1KeyArr: string[];
   lev2KeyArr: string[];
@@ -46,6 +49,7 @@ const getTreeLabels = (data: {
   return rootTrees;
 };
 
+// get unique keys from data in each level
 const getKeys = (data: DataShape[]) => {
   const lev1KeySet = new Set<string>();
   const lev2KeySet = new Set<string>();
@@ -72,9 +76,11 @@ const getKeys = (data: DataShape[]) => {
 
 const Sidebar = () => {
   const { records, range, rangeValue, setRangeValue } = useRecords();
+  const [min, max] = range;
+
   const [localRangeValue, setLocalRangeValue] = useState(rangeValue);
   const throttled = useThrottle(localRangeValue);
-  const [min, max] = range;
+
   const trees = useMemo(() => {
     if (records) {
       return getKeys(records);
@@ -82,6 +88,12 @@ const Sidebar = () => {
     return [];
   }, [records]);
 
+  // sync rangeValue with localRangeValue
+  useEffect(() => {
+    setLocalRangeValue(rangeValue);
+  }, [rangeValue]);
+
+  // PERF: set rangeValue when throttled changes
   useEffect(() => {
     setRangeValue(throttled);
   }, [throttled, setRangeValue]);
@@ -99,7 +111,7 @@ const Sidebar = () => {
 
         <div>
           <h5 className="font-semibold">Filters</h5>
-          <p className="text-sm">{`Spending: >= $${localRangeValue}`}</p>
+          <p className="text-sm">{`Spending: >= $${commaize(localRangeValue)}`}</p>
 
           <div className="mt-2">
             <input
@@ -112,8 +124,8 @@ const Sidebar = () => {
               onChange={(e) => setLocalRangeValue(Number(e.target.value))}
             />
             <div className="flex items-center justify-between text-xs text-gray-600">
-              <span>${min}</span>
-              <span>${max}</span>
+              <span>${commaize(min)}</span>
+              <span>${commaize(max)}</span>
             </div>
           </div>
         </div>
