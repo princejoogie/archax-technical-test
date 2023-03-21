@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useRecords } from "../contexts/record-context";
-import Tree from "../components/tree";
+import NavigationTree from "./navigation-tree";
 
 import type { ITree, DataShape } from "../types";
 
@@ -79,13 +79,15 @@ const Sidebar = () => {
   }, [records]);
 
   return (
-    <div>
-      <div>
+    <nav className="h-screen flex flex-col px-4 pt-4 bg-white border-r border-gray-300">
+      <h3 className="font-bold ml-3">Navigation</h3>
+
+      <div className="flex-1 overflow-y-auto hide-sb pb-4">
         {trees.map((e) => (
-          <Tree {...e} idx={0} />
+          <NavigationTree {...e} key={e.name} idx={0} />
         ))}
       </div>
-    </div>
+    </nav>
   );
 };
 

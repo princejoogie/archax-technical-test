@@ -1,0 +1,12 @@
+body {
+  background: #f9fafb;
+}
+
+.hide-sb::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-sb {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

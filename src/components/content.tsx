@@ -1,24 +1,23 @@
 import { useRecords } from "../contexts/record-context";
 
 const Content = () => {
-  const { filteredRecords } = useRecords();
+  const { filteredRecords, selectedCapability } = useRecords();
 
   return (
-    <div className="flex-1">
-      <div className="flex gap-4 flex-wrap">
-        {filteredRecords.length > 0 ? (
-          filteredRecords.map((e) => (
-            <div key={e.id} className="border p-4">
-              <p>{e.name}</p>
-              <p>${e.spend}</p>
-              <p>1: {e.BCAP1}</p>
-              <p>2: {e.BCAP2}</p>
-              <p>3: {e.BCAP3}</p>
-            </div>
-          ))
-        ) : (
-          <p>Please select a capability</p>
-        )}
+    <div className="flex-1 p-4">
+      <h1 className="font-bold">
+        {filteredRecords.length > 0
+          ? `${selectedCapability} (${filteredRecords.length})`
+          : "Please select a capability"}
+      </h1>
+
+      <div className="flex gap-4 flex-wrap mt-4">
+        {filteredRecords.map((e) => (
+          <div key={e.id} className="border bg-white border-gray-300 rounded-lg p-4">
+            <h4 className="text-center">{e.name}</h4>
+            <p className="text-center text-sm text-gray-600">${e.spend}</p>
+          </div>
+        ))}
       </div>
     </div>
   );
