@@ -31,3 +31,9 @@ Additional notes
 - We will be looking at code/file structure, code quality & best practices & design.
 - Add comments where necessary or to document any assumptions/considerations you may have.
 - You shouldn't need to use any external libraries
+
+---
+
+## OUTPUT DEMO (Prince)
+
+![demo](https://user-images.githubusercontent.com/47204120/226507634-0048af1e-ddea-4efa-802a-afda4b72901e.gif)
