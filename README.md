@@ -4,6 +4,11 @@
 
 ![demo](https://user-images.githubusercontent.com/47204120/226507634-0048af1e-ddea-4efa-802a-afda4b72901e.gif)
 
+### Thoughts
+
+1. Instructions below mentioned that no external libs are required; but ideally, each item in the navigation tree should link to a different URL. 
+2. The spending filters changes very quickly when dragging and will result in hundreds of re-renders per second. To fix this problem, there are 2 values for the spending filter, one local only to the filter component and the other in the global context. I created a [`useThrottle`](./src/hooks/useThrottle.ts) hook that only updates the global context value every 200ms.
+
 ---
 
 ## Instructions
