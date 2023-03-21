@@ -9,7 +9,7 @@ type UseFetchData<T> = {
 
 const cache = new Map<string, any>();
 
-export default function useFetch<T>(url: string): UseFetchData<T> {
+const useFetch = <T>(url: string): UseFetchData<T> => {
   const [data, setData] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefetching, setIsRefetching] = useState(false);
@@ -70,4 +70,6 @@ export default function useFetch<T>(url: string): UseFetchData<T> {
     isRefetching,
     error,
   };
-}
+};
+
+export default useFetch;
