@@ -1,8 +1,9 @@
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useRecords } from "../contexts/record-context";
 import NavigationTree from "./navigation-tree";
 
 import type { ITree, DataShape } from "../types";
+import useThrottle from "../hooks/useThrottle";
 
 const getTreeLabels = (data: {
   lev1KeyArr: string[];
@@ -70,7 +71,10 @@ const getKeys = (data: DataShape[]) => {
 };
 
 const Sidebar = () => {
-  const { records } = useRecords();
+  const { records, range, rangeValue, setRangeValue } = useRecords();
+  const [localRangeValue, setLocalRangeValue] = useState(rangeValue);
+  const throttled = useThrottle(localRangeValue);
+  const [min, max] = range;
   const trees = useMemo(() => {
     if (records) {
       return getKeys(records);
@@ -78,14 +82,41 @@ const Sidebar = () => {
     return [];
   }, [records]);
 
+  useEffect(() => {
+    setRangeValue(throttled);
+  }, [throttled, setRangeValue]);
+
   return (
     <nav className="h-screen flex flex-col px-4 pt-4 bg-white border-r border-gray-300">
       <h3 className="font-bold ml-3">Navigation</h3>
 
-      <div className="flex-1 overflow-y-auto hide-sb pb-4">
-        {trees.map((e) => (
-          <NavigationTree {...e} key={e.name} idx={0} />
-        ))}
+      <div className="flex-1 flex flex-col overflow-y-auto hide-sb pb-4">
+        <div className="flex-1">
+          {trees.map((e) => (
+            <NavigationTree {...e} key={e.name} idx={0} />
+          ))}
+        </div>
+
+        <div>
+          <h5 className="font-semibold">Filters</h5>
+          <p className="text-sm">{`Spending: >= $${localRangeValue}`}</p>
+
+          <div className="mt-2">
+            <input
+              disabled={min === max}
+              className="w-full"
+              type="range"
+              min={min}
+              max={max}
+              value={localRangeValue}
+              onChange={(e) => setLocalRangeValue(Number(e.target.value))}
+            />
+            <div className="flex items-center justify-between text-xs text-gray-600">
+              <span>${min}</span>
+              <span>${max}</span>
+            </div>
+          </div>
+        </div>
       </div>
     </nav>
   );
