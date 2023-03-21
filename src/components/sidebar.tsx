@@ -75,7 +75,7 @@ const getKeys = (data: DataShape[]) => {
 };
 
 const Sidebar = () => {
-  const { records, range, rangeValue, setRangeValue } = useRecords();
+  const { records, range, rangeValue, setRangeValue, isLoading, error } = useRecords();
   const [min, max] = range;
 
   const [localRangeValue, setLocalRangeValue] = useState(rangeValue);
@@ -103,15 +103,20 @@ const Sidebar = () => {
       <h3 className="font-bold ml-3">Navigation</h3>
 
       <div className="flex-1 flex flex-col overflow-y-auto hide-sb pb-4">
+        {error ? (<p className="text-red-600 mt-2 text-sm">{error.message}</p>) : null}
         <div className="flex-1">
-          {trees.map((e) => (
-            <NavigationTree {...e} key={e.name} idx={0} />
-          ))}
+          {isLoading ? (
+            <p className="mt-2 text-sm text-gray-600">Loading...</p>
+          ) : (
+            trees.map((e) => <NavigationTree {...e} key={e.name} idx={0} />)
+          )}
         </div>
 
         <div>
           <h5 className="font-semibold">Filters</h5>
-          <p className="text-sm">{`Spending: >= $${commaize(localRangeValue)}`}</p>
+          <p className="text-sm">{`Spending: >= $${commaize(
+            localRangeValue
+          )}`}</p>
 
           <div className="mt-2">
             <input

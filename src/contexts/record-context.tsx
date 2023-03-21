@@ -7,6 +7,8 @@ export const recordsContext = createContext<{
   rangeValue: number;
   setRangeValue: React.Dispatch<React.SetStateAction<number>>;
   records: DataShape[];
+  isLoading: boolean;
+  error: Error | null;
   filteredRecords: DataShape[];
   selectedCapability: string;
   setSelectedCapability: React.Dispatch<React.SetStateAction<string>>;
@@ -15,13 +17,15 @@ export const recordsContext = createContext<{
   rangeValue: 0,
   setRangeValue: () => {},
   records: [],
+  isLoading: true,
+  error: null,
   filteredRecords: [],
   selectedCapability: "",
   setSelectedCapability: () => {},
 });
 
 export const RecordProvider = ({ children }: { children: ReactNode }) => {
-  const { data } = useFetch<DataShape[]>("http://localhost:8080/data");
+  const { data, isLoading, error } = useFetch<DataShape[]>("http://localhost:8080/data");
   const [selectedCapability, setSelectedCapability] = useState("");
   const [range, setRange] = useState<[number, number]>([0, 0]);
   const [rangeValue, setRangeValue] = useState(0);
@@ -61,6 +65,8 @@ export const RecordProvider = ({ children }: { children: ReactNode }) => {
         rangeValue,
         setRangeValue,
         records: data ?? [],
+        isLoading,
+        error,
         filteredRecords: filteredOnRange,
         selectedCapability,
         setSelectedCapability,
