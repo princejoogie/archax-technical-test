@@ -1,5 +1,13 @@
 # React Exercise
 
+## Final output DEMO (Prince)
+
+![demo](https://user-images.githubusercontent.com/47204120/226507634-0048af1e-ddea-4efa-802a-afda4b72901e.gif)
+
+---
+
+## Instructions
+
 This exercise is to help us better understand your experience in react and typescript, how you would go about structuring your work, code quality, styles, etc...
 
 ## Setup
@@ -31,9 +39,3 @@ Additional notes
 - We will be looking at code/file structure, code quality & best practices & design.
 - Add comments where necessary or to document any assumptions/considerations you may have.
 - You shouldn't need to use any external libraries
-
----
-
-## OUTPUT DEMO (Prince)
-
-![demo](https://user-images.githubusercontent.com/47204120/226507634-0048af1e-ddea-4efa-802a-afda4b72901e.gif)
